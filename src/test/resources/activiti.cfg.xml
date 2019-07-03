@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8" />
+    <property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
+    <property name="jdbcUsername" value="root" />
+    <property name="jdbcPassword" value="abcd1234" />
+    
+    <!-- Database configurations -->
+    <!--flase： 默认值。activiti在启动时，会对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常。
+    true： activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建。
+    create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）。
+    drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）。-->
+    <property name="databaseSchemaUpdate" value="true" />
+
+	<!-- Test logger -->
+	<!-- <property name="configurators">
+		<list>
+			<bean class="org.activiti.engine.test.impl.logger.ProcessExecutionLoggerConfigurator" />
+		</list>
+	</property> -->
+
+    <!-- job executor configurations -->
+ <!--   <property name="asyncExecutor" ref="asyncExecutor" />
+    <property name="asyncExecutorActivate" value="false" />
+    
+    <property name="asyncFailedJobWaitTime" value="1" />
+
+    &lt;!&ndash; mail server configurations &ndash;&gt;
+    <property name="mailServerPort" value="5025" />
+    
+    <property name="mailServers">
+      <map>
+        <entry key="myEmailTenant">
+          <bean class="org.activiti.engine.cfg.MailServerInfo">
+            <property name="mailServerHost" value="localhost" />
+            <property name="mailServerPort" value="5025" />
+            <property name="mailServerUseSSL" value="false" />
+            <property name="mailServerUseTLS" value="false" />
+            <property name="mailServerDefaultFrom" value="activiti@myTenant.com" />
+            <property name="mailServerUsername" value="activiti@myTenant.com" />
+            <property name="mailServerPassword" value="password" />
+          </bean>
+        </entry>
+      </map>
+    </property>
+    
+    <property name="history" value="full" />
+    
+    <property name="enableProcessDefinitionInfoCache" value="true" />-->
+  </bean>
+  
+<!--  <bean id="asyncExecutor" class="org.activiti.engine.impl.asyncexecutor.DefaultAsyncJobExecutor">
+    <property name="defaultAsyncJobAcquireWaitTimeInMillis" value="1000" />
+    <property name="defaultTimerJobAcquireWaitTimeInMillis" value="1000" />
+  </bean>-->
+
+</beans>
