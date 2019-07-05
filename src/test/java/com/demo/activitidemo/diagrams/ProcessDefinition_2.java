@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
 
@@ -50,6 +50,20 @@ public class ProcessDefinition_2 {
         System.out.println("部署名称:" + processDefinition.getName());
     }
 
+    //生成测试流程定义
+//    @Test
+//    public void createProcessDefinition(){
+//
+//        Deployment deployment = processEngine.getRepositoryService()
+//                .createDeployment()
+//                .addClasspathResource("bpmn/first.bpmn")
+//                .name("第一个流程定义")
+//                .deploy();
+//
+//        System.out.println("部署ID:"+ deployment.getId());
+//        System.out.println("部署名称:" + deployment.getName());
+//    }
+
     //查询流程定义
     @Test
     public void findProcessDefinition(){
@@ -80,7 +94,7 @@ public class ProcessDefinition_2 {
 
         //及联删除，不管流程是否启动，都能删除
         processEngine.getRepositoryService()
-                .deleteDeployment("15001",true);
+                .deleteDeployment("32501",true);
 
 
         System.out.println("删除成功");
@@ -102,8 +116,44 @@ public class ProcessDefinition_2 {
 
         FileUtils.copyInputStreamToFile(resourceAsStream,new File("D:" + File.separator + resourceName));
 
-
         System.out.println("图片下载成功");
     }
+
+    //符加功能：查询最新版本流程定义
+    @Test
+    public void findLastVersionProcessDefinition(){
+
+        List<ProcessDefinition> list = processEngine.getRepositoryService()
+                .createProcessDefinitionQuery()
+                .orderByProcessDefinitionVersion().asc()
+                .list();
+
+
+        Map<String, Optional<ProcessDefinition>> map = list.stream()
+                .collect(Collectors.groupingBy(ProcessDefinition::getName, Collectors.maxBy(Comparator.comparing(ProcessDefinition::getVersion))));
+
+        List<ProcessDefinition> processDefinitionList = new ArrayList<>(map.values().stream().collect(Collectors.mapping(Optional::get, Collectors.toList())));
+
+        processDefinitionList.forEach(System.out::println);
+
+    }
+
+
+    //根据name删除所有流程定义
+    @Test
+    public void deleteAllProcessDefinitionByName(){
+
+        // 查询出所的相同name的流程定义
+        List<ProcessDefinition> processDefinitionList = processEngine.getRepositoryService()
+                .createProcessDefinitionQuery()
+                .processDefinitionName("helloworldProcess")
+                .list();
+
+        //循环指删除
+        processDefinitionList.forEach(processDefinition -> processEngine.getRepositoryService().deleteDeployment(processDefinition.getDeploymentId(), true));
+
+        System.out.println("删除成功");
+    }
+
 
 }
