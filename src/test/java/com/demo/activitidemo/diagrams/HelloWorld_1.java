@@ -49,7 +49,7 @@ public class HelloWorld_1 {
 
         List<Task> taskList = processEngine.getTaskService()  //正在执行的任务相关service
                 .createTaskQuery()   //创建查询对象
-                .taskAssignee("王五")  //指定查询人
+                .taskAssignee("张三")  //指定查询人
                 .list();
 
         taskList.forEach(task -> {
@@ -66,7 +66,7 @@ public class HelloWorld_1 {
     @Test
     public void completeMyPersonalTask(){
 
-        String taskId = "7502";
+        String taskId = "42505";
         processEngine.getTaskService().complete(taskId);
 
         System.out.println(String.format("完成任务ID:%s",taskId));  // 2505
