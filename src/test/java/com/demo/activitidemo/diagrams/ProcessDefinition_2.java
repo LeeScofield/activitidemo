@@ -1,7 +1,10 @@
 package com.demo.activitidemo.diagrams;
 
+import com.alibaba.fastjson.JSON;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FileUtils;
@@ -155,5 +158,33 @@ public class ProcessDefinition_2 {
         System.out.println("删除成功");
     }
 
+    //查询历史任务
+    @Test
+    public void findHistoryTask(){
 
+        List<HistoricTaskInstance> list = processEngine.getHistoryService()
+                .createHistoricTaskInstanceQuery()
+                .taskAssignee("张三")
+                .list();
+
+        list.forEach(historicTaskInstance -> {
+            String str = JSON.toJSONString(historicTaskInstance);
+            System.out.println(historicTaskInstance.getId() + "  " + str);
+        });
+
+    }
+
+
+    //查询历史流程实例
+    @Test
+    public void findHistoryProcessInstance(){
+
+        HistoricProcessInstance historicProcessInstance = processEngine.getHistoryService()
+                .createHistoricProcessInstanceQuery()
+                .processInstanceId("42501")
+                .singleResult();
+
+        System.out.println(JSON.toJSONString(historicProcessInstance));
+
+    }
 }
